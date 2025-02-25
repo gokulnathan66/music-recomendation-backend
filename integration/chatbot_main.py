@@ -8,7 +8,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from gemini.get_song_info_llm import get_song_name_artist_name
 from song_api.song_api import get_song_info, get_top_tracks_from_tag,get_lyrics_textly
-from userdata import update_user_preferences, get_user_preferences, update_user_history,update_feedback
+from integration.userdata_JSON import update_user_preferences, get_user_preferences, update_user_history,update_feedback
 # Find .env file from the parent directory
 dotenv_path = find_dotenv()
 load_dotenv(dotenv_path)
