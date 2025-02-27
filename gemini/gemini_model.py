@@ -12,9 +12,9 @@ load_dotenv(dotenv_path)
 
 
 # Example: Accessing an environment variable
-MUSIC_API_KEY = os.getenv("MUSIC_API_KEY")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-genai.configure(api_key=MUSIC_API_KEY)
+genai.configure(api_key=GEMINI_API_KEY)
 
 # Create the model
 generation_config = {
