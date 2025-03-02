@@ -6,6 +6,7 @@ from typing import Optional
 file_path = 'user_data.json'
 
 def read_user_data(user_id: str) -> Optional[list]:
+
     """
     Reads and retrieves user-specific data from a JSON file.
     
@@ -16,6 +17,7 @@ def read_user_data(user_id: str) -> Optional[list]:
         Optional[list]: A list of stored strings associated with the user_id if found,
                         otherwise None if the user does not exist.
     """
+    print("read user data called")
     if not os.path.exists(file_path):
         return None  # File does not exist
     
@@ -38,6 +40,7 @@ def write_user_data(user_id: str, new_data: str) -> None:
     Returns:
         None
     """
+    print("write user data called")
     if os.path.exists(file_path):
         with open(file_path, 'r') as file:
             data = json.load(file)

@@ -96,5 +96,54 @@
         "Second string for user 1",
         "third string for user 1",
         "fourth string for user 1"
+    ],
+    "bfacbb2f-f8ef-4f9b-834f-71b34857ee7b": [
+        "Song: I Wanna Be Yours; Artist: Arctic Monkeys; Genre: Indie Rock; Tags: indie rock, alternative, indie, british, sexy; Top Tracks: Mr. Brightside, Creep, Karma Police, No Surprises, Take Me Out"
+    ],
+    "i ": [
+        "Song: I Wanna Be Yours, Artist: Arctic Monkeys, Album: AM, Duration: 55000ms, Published Date: 08 Feb 2014, Summary:  \"I Wanna Be Yours\" is an adaptation of a poem by John Cooper Clarke..., Content: \"I Wanna Be Yours\" is an adaptation of a poem by John Cooper Clarke..., Tags: indie rock, alternative, indie, british, sexy",
+        "Song: Sunflower, Artist: Post Malone & Swae Lee",
+        "Song: Bad Guy, Artist: Billie Eilish"
+    ],
+    "87a841c5-6688-4ed6-9450-034b69e62d2f": [
+        "{\"song_info\": {\"song_name\": \"I Wanna Be Yours\", \"artist_name\": \"Arctic Monkeys\", \"album_name\": \"AM\", \"duration\": 55000, \"release_date\": \"08 Feb 2014, 19:55\", \"summary\": \"I Wanna Be Yours is an adaptation of a poem by John Cooper Clarke...\", \"content\": \"I Wanna Be Yours is an adaptation of a poem by John Cooper Clarke...\", \"tags\": [\"indie rock\", \"alternative\", \"indie\", \"british\", \"sexy\"]}}"
+    ],
+    "b6ee5c05-fe32-45c2-afc1-6db0caf881f8": [
+        "{\"song\": \"I Wanna Be Yours\", \"artist\": \"Arctic Monkeys\", \"tags\": [\"indie rock\", \"alternative\", \"indie\", \"british\", \"sexy\"]}"
+    ],
+    "735fc61c-ecd1-42a5-a089-322310ed0e84": [
+        "Initial query: \"i wanna be yours\", Result: No match found.",
+        "Song details for \"I Wanna Be Yours\": "
+    ],
+    "bf76885c-5c6e-4946-9bdc-dc1bc82309f9": [
+        "Liked: I Wanna Be Yours (Arctic Monkeys); Tags: indie rock, alternative, indie, british, sexy; Recommendations received: Mr. Brightside, Creep, Karma Police etc."
+    ],
+    "60f7d0ce-51b4-4470-a7ea-6d9c338688bd": [
+        "I Wanna Be Yours,Arctic Monkeys,indie rock,alternative,british"
+    ],
+    "19ffb200-b37d-47e2-854a-2a300d3f081e": [
+        "I Wanna Be Yours;Arctic Monkeys;indie rock;alternative;indie;british;sexy",
+        "505;Arctic Monkeys",
+        "Do I Wanna Know?;Arctic Monkeys",
+        "No. 1 Party Anthem;Arctic Monkeys"
+    ],
+    "8c591891-5510-42e1-909b-53d38500710b": [
+        "Likes Yellow by Coldplay.  Genres: rock, alternative, britpop, alternative rock.",
+        "Also likes Mess Is Mine by Vance Joy",
+        "Also likes Right Round by Flo Rida"
+    ],
+    "04fcf386-a116-4ac4-9a9b-de3c3278f6d7": [
+        "{\"song\": \"Tek It\", \"artist\": \"Cafun\u00e9\", \"tags\": [\"indie\", \"indie pop\", \"pop\", \"rock\", \"alternative\"]}"
+    ],
+    "5e185517-5fd4-4d76-a981-abb33e226b0f": [
+        "Likes Tek It by Cafun\u00e9; Genres: indie pop, pop, rock, alternative",
+        "Likes Summertime Sadness by Lana Del Rey; Dislikes other recommendations"
+    ],
+    "53d1902f-880b-4d5c-9602-3d70179a5e96": [
+        "{\"song\":\"Tek It\",\"artist\":\"Cafun\u00e9\",\"genres\":[\"indie\",\"indie pop\",\"pop\",\"rock\",\"alternative\"]}"
+    ],
+    "30c38cdd-d41e-4411-8aab-79c064728d9b": [
+        "user_preference: phonk",
+        "liked_song: Atlantis, artist: Seafret"
     ]
 }
