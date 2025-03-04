@@ -150,6 +150,55 @@ def get_top_tracks_from_tag(tag_name: str) -> List[Tuple[str, str]]:
     return result
 #testing get top tag trackes
 
+
+def get_top_song_from_artist(artist_name: str) -> Tuple[str, str, Optional[int]]:
+    """
+    Fetches the top song of an artist using the Last.fm API.
+    the top songs from the api for a certain artist.
+
+    Args:
+        artist_name (str): The name of the artist.
+
+    Returns:
+        Tuple[str, str, Optional[int]]: 
+            - track_name (str): The name of the top track.
+            - artist_name (str): The name of the artist.
+            - play_count (Optional[int]): The number of times the song has been played (if available).
+    """
+    url = "https://ws.audioscrobbler.com/2.0/"
+    params = {
+        "method": "artist.gettoptracks",
+        "artist": artist_name,
+        "api_key": api_key,
+        "format": "json",
+
+    }
+    
+    response = requests.get(url, params=params)
+    
+    if response.status_code != 200:
+        print(f"Request failed with status code: {response.status_code}")
+        return "", artist_name, None
+    
+    data = response.json()
+    try:
+        track = data['toptracks']['track'][0]
+        track_name = track['name']
+        corrected_artist_name = track['artist']['name']
+        play_count = int(track.get('playcount', 0))
+        print("get artist top song called")
+        
+    except (KeyError, IndexError) as e:
+        print(f"Error parsing response: {e}")
+        return "", artist_name, None
+    
+    return track_name, corrected_artist_name, play_count
+
+# Example usage:
+# api_key = "your_api_key_here"
+# top_song = get_top_song("Cher", api_key)
+# print(top_song)
+
 # #this api function takes too much time to retrive
 # def get_lyrics(song_name, artist_name):
 #     # Define parameters
@@ -169,8 +218,8 @@ def get_top_tracks_from_tag(tag_name: str) -> List[Tuple[str, str]]:
 
 #testing the function
 # get_lyrics("Shape of You", "Ed Sheeran")
-import requests
-from typing import Optional
+# import requests
+# from typing import Optional
 
 # def get_lyrics_textly(song_name: str) -> Optional[str]:
 #     """

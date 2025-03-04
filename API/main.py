@@ -1,24 +1,46 @@
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+import asyncio
 import os
 import sys
-from typing import Iterable
 from dotenv import load_dotenv, find_dotenv
+import google.generativeai as genai
+from google.api_core import retry
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
+# Import necessary functions from your modules
+from integration.chatbot_main_from_barista import *
 from gemini.get_song_info_llm import get_song_name_artist_name
-from song_api.song_api import get_song_info, get_top_tracks_from_tag,get_top_song_from_artist
-#,get_lyrics_textly
-from .userdata_JSON import *
+from song_api.song_api import get_song_info, get_top_tracks_from_tag, get_top_song_from_artist
+from integration.userdata_JSON import *
+
+# Load environment variables
 dotenv_path = find_dotenv()
 load_dotenv(dotenv_path)
-# Load API Key
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-import google.generativeai as genai
-from google.api_core import retry
+
+# Configure Gemini AI API
 genai.configure(api_key=GEMINI_API_KEY)
 
+# FastAPI app instance
+app = FastAPI()
 
-# System Prompt
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # Add your frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Define data model for requests
+class MessageRequest(BaseModel):
+    message: str
+
+# Define system prompt for AI
 MUSIC_BOT_PROMPT = """
 you are a sophisticated AI music recommendation bot. Your primary function is to provide personalized music suggestions based on user input. Initiate a conversation by greeting the user and requesting a song or artist of interest. Begin by generating a unique user ID using the generate_user_id function to track user data also save the user id in the user data for future use. 
 
@@ -39,27 +61,60 @@ Extra information besides from music recommendation:
 
      - if you have a suggestion to imporve the recommendatinon in the function you can add it in the user data by write_user_data function.
      - get_top_song_from_artist can be used to get top songs from the user use wisely the function when needed. save the response in the user data.
-     - when the user ask for suggestion read the user data by read_user_data and suggest songs
 """
-#in the time of every response, if you 'gemini ai' want to add someting that you dont have right now and it will be better if you have that, you can add the same thing in the user data by 
-#write_user_data function i will take care of that.
-ordering_system = [get_song_name_artist_name, get_song_info, get_top_tracks_from_tag,read_user_data, write_user_data, generate_user_id,get_top_song_from_artist]
-# get_lyrics_textly,
 
-model_name = 'gemini-1.5-flash' 
+# List of AI functions to use
+ordering_system = [
+    get_song_name_artist_name, 
+    get_song_info, 
+    get_top_tracks_from_tag,
+    read_user_data, 
+    write_user_data, 
+    generate_user_id,
+    get_top_song_from_artist
+]
 
-
+# Initialize AI model and conversation
+model_name = 'gemini-1.5-flash'
 model = genai.GenerativeModel(model_name, tools=ordering_system)
+chat_history =[
+        {'role': 'user', 'parts': [MUSIC_BOT_PROMPT]},
+        {'role': 'model', 'parts': ['OK I understand. I will do my best!']}
+    ]
 convo = model.start_chat(
-      history=[
-          {'role': 'user', 'parts': [MUSIC_BOT_PROMPT]},
-          {'role': 'model', 'parts': ['OK I understand. I will do my best!']}
-        ],
-      enable_automatic_function_calling=True)
+    history=chat_history,
+    enable_automatic_function_calling=True
+)
 
+# Store chat history
+chat_history = []
 
-@retry.Retry(initial=30)
-def send_message(message):
-  return convo.send_message(message)
+# Async function to send message to AI
+async def send_message_async(message):
+    return await asyncio.to_thread(convo.send_message, message)
 
+@app.get("/test")
+async def test_api():
+    return {"message": "API is working!"}
 
+@app.post("/api/chat")
+async def get_music_recommendation(request: MessageRequest):
+    try:
+        global chat_history  # Ensure persistent conversation tracking
+
+        # Add user message to history
+        chat_history.append({'role': 'user', 'parts': [request.message]})
+
+        # Send message asynchronously
+        response = await send_message_async(request.message)
+
+        if not response or not hasattr(response, 'text'):
+            raise HTTPException(status_code=400, detail="No valid response generated")
+
+        # Add AI response to history
+        chat_history.append({'role': 'model', 'parts': [response.text]})
+
+        return {"response": response.text}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

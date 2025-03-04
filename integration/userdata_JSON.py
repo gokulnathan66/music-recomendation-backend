@@ -58,8 +58,11 @@ def write_user_data(user_id: str, new_data: str) -> None:
 def generate_user_id() -> str:
     """
     Generates a unique user identifier using UUID.
+    This id is used to keep track of the current user in the chat and manages their data using 
+    this id.
     
     Returns:
         str: A randomly generated unique identifier.
     """
+    print("generate user id called")
     return str(uuid.uuid4())
