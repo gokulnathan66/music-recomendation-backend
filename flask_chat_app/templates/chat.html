@@ -5,50 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat Room</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        async function sendMessage() {
-            let chatId = "{{ chat_id }}";
-            let message = document.getElementById("messageInput").value;
-            if (!message.trim()) return;
-
-            document.getElementById("messageInput").value = "";
-
-            let response = await fetch("/send_message", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ chat_id: chatId, message: message })
-            });
-
-            if (response.ok) {
-                loadMessages();
-            }
-        }
-
-        async function loadMessages() {
-            let chatId = "{{ chat_id }}";
-            let response = await fetch(`/get_chat/${chatId}`);
-            let data = await response.json();
-
-            let chatBox = document.getElementById("chatBox");
-            chatBox.innerHTML = "";
-
-            data.messages.forEach(msg => {
-                let messageDiv = document.createElement("div");
-                messageDiv.className = "p-3 my-2 w-fit max-w-xs rounded-lg shadow";
-                messageDiv.innerText = msg.user;
-                messageDiv.classList.add("bg-blue-500", "text-white", "self-end");
-
-                chatBox.appendChild(messageDiv);
-            });
-
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-
-        setInterval(loadMessages, 1000);
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.0/socket.io.js"></script>
 </head>
-<body class="flex flex-col items-center justify-center h-screen bg-gray-200">
-    <div class="w-full max-w-2xl bg-white rounded-lg shadow-lg">
+<body class="flex h-screen bg-gray-100">
+
+    <!-- Sidebar -->
+    <div class="w-1/4 bg-white shadow-lg p-4">
+        <h2 class="text-lg font-bold text-gray-800 mb-4">Previous Chats</h2>
+        <ul>
+            {% for id in chat_ids %}
+                <li class="mb-2">
+                    <a href="{{ url_for('chat_page', chat_id=id) }}" class="text-blue-500 hover:underline">
+                        Chat {{ id }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Chat Window -->
+    <div class="w-3/4 flex flex-col justify-between bg-white rounded-lg shadow-lg mx-4 p-4">
         <div class="p-4 bg-blue-500 text-white font-bold text-center">
             Chat Session (ID: {{ chat_id }})
         </div>
@@ -60,5 +36,43 @@
             </button>
         </div>
     </div>
+
+    <script>
+        let socket = io.connect("http://" + document.domain + ":" + location.port);
+        let chatId = "{{ chat_id }}";
+
+        // Join chat room on load
+        socket.emit("join", { chat_id: chatId });
+
+        // Load previous messages on join
+        socket.on("load_messages", (messages) => {
+            let chatBox = document.getElementById("chatBox");
+            chatBox.innerHTML = "";
+            messages.forEach(msg => appendMessage(msg.user));
+        });
+
+        // Append new messages instantly when received
+        socket.on("receive_message", (data) => {
+            appendMessage(data.user);
+        });
+
+        function sendMessage() {
+            let message = document.getElementById("messageInput").value;
+            if (!message.trim()) return;
+
+            document.getElementById("messageInput").value = "";
+            socket.emit("send_message", { chat_id: chatId, message: message });
+        }
+
+        function appendMessage(message) {
+            let chatBox = document.getElementById("chatBox");
+            let messageDiv = document.createElement("div");
+            messageDiv.className = "p-3 my-2 w-fit max-w-xs rounded-lg shadow bg-blue-500 text-white self-end";
+            messageDiv.innerText = message;
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
+
 </body>
 </html>
