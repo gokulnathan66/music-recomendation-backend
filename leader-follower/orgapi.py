@@ -1,6 +1,7 @@
+# this api manages the communication between the user and model
 from flask import Flask, request, jsonify
-from master import send_message_master
-from slave import send_message_slave
+from leader import send_message_master
+from follower import send_message_slave
 
 app = Flask(__name__)
 userid="12hi87oL"
