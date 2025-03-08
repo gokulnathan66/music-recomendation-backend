@@ -1,0 +1,9 @@
+Flask
+flask-cors
+python-dotenv
+requests
+pydantic
+google-generativeai
+google-api-core
+pymongo
+waitress

@@ -1,6 +1,4 @@
 from flask import *
-from pydantic import BaseModel
-import asyncio
 import os
 import sys
 import google.generativeai as genai
@@ -59,8 +57,7 @@ when suggesting song suggest full songs dont just say many more to the user.
 **Call the appropriate function(s) with real execution.**  
 **Process the returned data** and retrieve relevant recommendations.  
 **Format a user-friendly response** with song suggestions.  
-
-
+**list the songs one by one to the user**.
 
 """
 #in the time of every response, if you 'gemini ai' want to add someting that you dont have right now and it will be better if you have that, you can add the same thing in the user data by 

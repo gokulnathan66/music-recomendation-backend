@@ -1,9 +1,11 @@
+#org_api.py
 from flask import Flask, request, jsonify
 from leader import send_message_leader
 from follower import send_message_follower
 from flask_cors import CORS
 import os
 import logging
+from waitress import serve
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -39,8 +41,6 @@ def process():
         return jsonify({"error": "Internal Server Error"}), 500
 
 if __name__ == '__main__':
-    HOST = os.environ.get("FLASK_HOST", "0.0.0.0")
+    HOST = os.environ.get("FLASK_HOST", "0.0.0.0")  # Change default to 0.0.0.0
     PORT = int(os.environ.get("FLASK_PORT", 5000))
-    DEBUG = os.environ.get("FLASK_DEBUG", "False").lower() in ['true', '1']
-
-    app.run(host=HOST, port=PORT, debug=DEBUG)
+    serve(app, host=HOST, port=PORT)
