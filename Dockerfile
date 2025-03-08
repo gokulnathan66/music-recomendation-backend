@@ -26,4 +26,4 @@ RUN useradd -m flaskuser
 USER flaskuser
 
 # Run the Flask app using Waitress
-CMD ["python", "leader-follower/org_api.py"]
+CMD ["python", "leader-follower/orgapi.py"]
