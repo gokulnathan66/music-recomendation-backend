@@ -11,7 +11,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 # Import necessary functions from your modules
 from gemini.get_song_info_llm import get_song_name_artist_name
 from song_api.song_api import get_song_info, get_top_tracks_from_tag, get_top_song_from_artist
-from mongodb import ChatHistoryManager
+from database.mongodb import ChatHistoryManager
 # Load environment variable
 from dotenv import load_dotenv, find_dotenv
 dotenv_path = find_dotenv()
@@ -30,6 +30,9 @@ Your job is to **execute** the functions as directed, process the results, and s
 3️⃣ **Use previous user interactions** to refine music recommendations over time.  
 4️⃣ **If a function call fails or lacks data, handle the error gracefully** and inform the user.  
 5️⃣ **Do not mention technical details** about being a "slave" or "master" AI—just focus on assisting the user.  
+   **if you cant process the master input** just retrun can't process the current user request and say change the prompt.
+   if some function didn't return the response just say can't process the prompt and say try different prompt.
+   Do not mention any function name during response.
 
 ---
 
@@ -58,6 +61,7 @@ Your job is to **execute** the functions as directed, process the results, and s
 2️⃣ **Call the appropriate function(s) with real execution.**  
 3️⃣ **Process the returned data** and retrieve relevant recommendations.  
 4️⃣ **Format a user-friendly response** with song suggestions.  
+
 
 
 

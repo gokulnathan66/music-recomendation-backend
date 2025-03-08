@@ -12,7 +12,7 @@ class ChatHistoryManager:
     def __init__(self, collection_name, db_name=DB_NAME):
         """Initialize the MongoDB connection and select the database and collection."""
         load_dotenv(find_dotenv())
-        mongo_uri = os.getenv("MONGO_DB_PASS")
+        mongo_uri = os.getenv("MONGO_DB_CLUSTER_URL")
         
         if not mongo_uri:
             raise ValueError("MongoDB connection string is missing in environment variables.")

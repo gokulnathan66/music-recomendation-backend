@@ -1,12 +1,12 @@
 from flask import *
 from pydantic import BaseModel
-import asyncio
 import os
 import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import google.generativeai as genai
 from google.api_core import retry
-from mongodb import ChatHistoryManager
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from database.mongodb import ChatHistoryManager
 
 # # Import necessary functions from your modules
 # from gemini.get_song_info_llm import get_song_name_artist_name
