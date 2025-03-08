@@ -2,9 +2,11 @@
 from flask import Flask, request, jsonify
 from leader import send_message_master
 from follower import send_message_slave
+from flask_cors import CORS
 
 app = Flask(__name__)
-userid="12hi87oL"
+CORS(app)  # Enable CORS for frontend communication
+
 
 @app.route("/")
 def home():
@@ -13,15 +15,14 @@ def home():
 @app.route('/process', methods=['POST'])
 def process():
     data = request.get_json()  # Get JSON input
-    message = data.get('message', 'i like sun flower')  # Default to 'Guest' if no name is provided
-    
-    response = send_message_master(userid,message)
-    slave_response=send_message_slave(userid,response)
-    return jsonify({
-        "User message": message,
-        "slave response": slave_response,
-        "master_replay":response,
-    })
+
+    session_id = data.get("session_id")
+    user_message = data.get("message")
+
+    response = send_message_master(session_id,user_message)
+    slave_response=send_message_slave(session_id,user_message)
+    return jsonify({"response": slave_response})
+
 
 if __name__ == '__main__':
     app.run(debug=True)
