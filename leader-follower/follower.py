@@ -11,7 +11,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 # Import necessary functions from your modules
 from gemini.get_song_info_llm import get_song_name_artist_name
 from song_api.song_api import get_song_info, get_top_tracks_from_tag, get_top_song_from_artist
-from mongodb import ChatHistoryManager
+from database.mongodb import ChatHistoryManager
 # Load environment variable
 from dotenv import load_dotenv, find_dotenv
 dotenv_path = find_dotenv()
@@ -20,7 +20,7 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 
 # System Prompt
-SLAVE_BOT_PROMPT = """
+FOLLOWER_BOT_PROMPT = """
 You are an AI music recommendation assistant that follows instructions from the Master AI Agent.  
 Your job is to **execute** the functions as directed, process the results, and suggest songs based on the gathered data.  
 
@@ -80,9 +80,9 @@ ordering_system = [
 model_name = 'gemini-1.5-flash'
 model = genai.GenerativeModel(model_name, tools=ordering_system)
 
-chat = ChatHistoryManager(collection_name="SLAVE-HISTORY")
+chat = ChatHistoryManager(collection_name="FLLOWER-HISTORY")
 @retry.Retry(initial=30)
-def send_message_slave(user_id, message: str):                                                                                                                                                                                                                                                                                                                                   
+def send_message_follower(user_id, message: str):                                                                                                                                                                                                                                                                                                                                   
     try:
         # Retrieve recent chat history
         recent_history = chat.get_recent_chat_history(user_id)
@@ -90,7 +90,7 @@ def send_message_slave(user_id, message: str):
         # Start chat with existing history
         chat_session = model.start_chat(
         history=[
-          {'role': 'user', 'parts': [SLAVE_BOT_PROMPT]},
+          {'role': 'user', 'parts': [FOLLOWER_BOT_PROMPT]},
           {'role': 'model', 'parts': ['OK I understand. I will do my best!']}
         ]+ recent_history,
         enable_automatic_function_calling=True

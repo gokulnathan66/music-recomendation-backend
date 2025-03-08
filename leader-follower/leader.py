@@ -5,8 +5,8 @@ import os
 import sys
 import google.generativeai as genai
 from google.api_core import retry
-from mongodb import ChatHistoryManager
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from database.mongodb import ChatHistoryManager
 
 # # Import necessary functions from your modules
 # from gemini.get_song_info_llm import get_song_name_artist_name
@@ -21,7 +21,7 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 
 # System Prompt
-MASTER_BOT_PROMPT = """
+LEADER_BOT_PROMPT = """
 You are a AI assistant master that will guide another AI agent slave to tell what to do in a system of music recommendation.
 Your are a AI assistant that will give a Prompt for the AI Agent. Your only job is to return an sentence of command to do by the AI agent. And Finally tell that the AI agent to Suggest some song based on the User input. Also Pass the User input in the quoted text.
 Your only Job is to return Appropriate Prompt for the AI Slave Agent Don't respond with any other output. 
@@ -53,10 +53,10 @@ model_name = 'gemini-1.5-flash'
 model = genai.GenerativeModel(model_name)
 userid=100192
 genai.configure(api_key=GEMINI_API_KEY)
-chat = ChatHistoryManager(collection_name="MASTER-HISTORY")
+chat = ChatHistoryManager(collection_name="LEADER-HISTORY")
 # Start the conversation
 @retry.Retry(initial=30)
-def send_message_master(user_id, message: str):                                                                                                                                                                                                                                                                                                                                   
+def send_message_leader(user_id, message: str):                                                                                                                                                                                                                                                                                                                                   
     try:
         # Retrieve recent chat history
         recent_history = chat.get_recent_chat_history(user_id)
@@ -64,7 +64,7 @@ def send_message_master(user_id, message: str):
         # Start chat with existing history
         chat_session = model.start_chat(
         history=[
-          {'role': 'user', 'parts': [MASTER_BOT_PROMPT]},
+          {'role': 'user', 'parts': [LEADER_BOT_PROMPT]},
           {'role': 'model', 'parts': ['OK I understand. I will do my best!']}
         ]+ recent_history,
         )
