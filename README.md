@@ -23,6 +23,7 @@
 
 4. **Set Up Environment Variables**  
    Create a `.env` file in the project root and add the required variables:
+   Use `.env.example`for declaring variables
    ```ini
    GEMINI_API_KEY="your-gemini-api-key"
    MUSIC_API_KEY="your-lastfm-api-key"
