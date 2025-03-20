@@ -1,6 +1,4 @@
 from flask import *
-from pydantic import BaseModel
-import asyncio
 import os
 import sys
 import google.generativeai as genai
@@ -20,9 +18,10 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 
 # System Prompt
-SLAVE_BOT_PROMPT = """
+FOLLOWER_BOT_PROMPT = """
 You are an AI music recommendation assistant that follows instructions from the Master AI Agent.  
 Your job is to execute the functions as directed, process the results, and suggest songs based on the gathered data.  
+
 
 Key Rules:
 if a use greets you just say hi and ask how can i help you.
@@ -34,7 +33,6 @@ Do not mention technical details about being a "slave" or "master" AI—just foc
 if you cant process the master input just retrun can't process the current user request and say change the prompt.
 if some function didn't return the response just say can't process the prompt and say try different prompt.
 Do not provide any output other than the song suggestions.
-
 
 
 How You Should Respond
@@ -86,9 +84,9 @@ ordering_system = [
 model_name = 'gemini-1.5-flash'
 model = genai.GenerativeModel(model_name, tools=ordering_system)
 
-chat = ChatHistoryManager(collection_name="SLAVE-HISTORY")
+chat = ChatHistoryManager(collection_name="FLLOWER-HISTORY")
 @retry.Retry(initial=30)
-def send_message_slave(user_id, message: str):                                                                                                                                                                                                                                                                                                                                   
+def send_message_follower(user_id, message: str):                                                                                                                                                                                                                                                                                                                                   
     try:
         # Retrieve recent chat history
         recent_history = chat.get_recent_chat_history(user_id)
@@ -96,7 +94,7 @@ def send_message_slave(user_id, message: str):
         # Start chat with existing history
         chat_session = model.start_chat(
         history=[
-          {'role': 'user', 'parts': [SLAVE_BOT_PROMPT]},
+          {'role': 'user', 'parts': [FOLLOWER_BOT_PROMPT]},
           {'role': 'model', 'parts': ['OK I understand. I will do my best!']}
         ]+ recent_history,
         enable_automatic_function_calling=True
