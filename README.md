@@ -1,3 +1,4 @@
+### In this project we used function calling method by geminin API
 ### Running the Project Using Python and Docker
 
 #### **Running the Project Normally with Python**
