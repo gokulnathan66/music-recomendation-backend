@@ -52,6 +52,7 @@
 #### **Running the Project with Docker**
 1. **Ensure Docker Is Installed**  
    If you haven't installed Docker, download and install it from [Docker's official website](https://www.docker.com/get-started/).
+   Working with docker will be easy for deployment.
 
 2. **Build the Docker Image**  
    Inside the project directory, run:
