@@ -49,7 +49,7 @@ Fetches an artist's top song from api, extracting the track name, verified artis
 """
 
 # Initialize the Gemini AI model
-model_name = 'gemini-1.5-flash'
+model_name = 'gemini-2.0-flash'
 model = genai.GenerativeModel(model_name)
 userid=100192
 genai.configure(api_key=GEMINI_API_KEY)

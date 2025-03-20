@@ -34,7 +34,8 @@ def process():
         leader_response = send_message_master(session_id, user_message)
         follower_response = send_message_slave(session_id, leader_response)
         
-        return jsonify({"response": follower_response})
+        return jsonify({"response": follower_response, 
+                        "leader_response": leader_response}), 200
 
     except Exception as e:
         logging.error(f"Error processing request: {str(e)}")

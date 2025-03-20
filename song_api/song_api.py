@@ -112,10 +112,6 @@ def get_top_tracks_from_tag(tag_name: str) -> List[Tuple[str, str]]:
             - track_name (str): The name of the track.
             - artist_name (str): The name of the artist.
 
-    Example:
-        >>> get_top_tracks_from_tag("pop")
-        [('Blinding Lights', 'The Weeknd'), ('Watermelon Sugar', 'Harry Styles'), ...]
-
     Notes:
         - If the API request fails, an empty list is returned.
         - Ensure `api_key` and `url` are correctly set up before calling this function.

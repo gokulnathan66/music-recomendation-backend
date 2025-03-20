@@ -40,8 +40,7 @@ class ChatHistoryManager:
         )
         return [{"role": msg["role"], "parts": [msg["message"]]} for msg in messages]
 
-# Example usage:
-# chat_manager = ChatHistoryManager()
+# chat_manager = ChatHistoryManager("leader")
 # chat_manager.save_chat_history("user123", "user", "Hello, how are you?")
 # history = chat_manager.get_recent_chat_history("user123")
 # print(history)
