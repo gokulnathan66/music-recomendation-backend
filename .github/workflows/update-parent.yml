@@ -24,7 +24,7 @@ jobs:
 
       - name: Update submodule to latest commit
         run: |
-          git submodule update --remote frontend/
-          git add frontend/
+          git submodule update --remote backend/
+          git add backend/
           git commit -m "chore: update child submodule to latest commit [auto]" || echo "No changes to commit"
           git push origin main
