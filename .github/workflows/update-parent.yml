@@ -1,0 +1,30 @@
+name: Update Parent Submodule
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-submodule:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout parent repository
+        uses: actions/checkout@v4
+        with:
+          repository: gokulnathan66/Music_recommender_Project_Parent
+          token: ${{ secrets.PARENT_REPO_PAT }}
+          submodules: recursive
+
+      - name: Set up Git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Update submodule to latest commit
+        run: |
+          git submodule update --remote frontend/
+          git add frontend/
+          git commit -m "chore: update child submodule to latest commit [auto]" || echo "No changes to commit"
+          git push origin main
